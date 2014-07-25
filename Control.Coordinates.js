@@ -2,6 +2,9 @@
 
 /**
  * author Michal Zimmermann <zimmicz@gmail.com>
+ * contributors: {
+ *     Marco Guernieri <mark.gue@hotmail.it> [@guernyesterday]
+ * }
  * Displays coordinates of mouseclick.
  * @param object options:
  *        position: bottomleft, bottomright etc. (just as you are used to it with Leaflet)
@@ -9,6 +12,7 @@
  *        longitudeText: description of latitude value (defaults to lon.)
  *        promptText: text displayed when user clicks the control
  *        precision: number of decimals to be displayed
+ *        visibleAfterClick: flag to decide if coordinates must be shown only after the first click
  */
 L.Control.Coordinates = L.Control.extend({
 	options: {
@@ -16,7 +20,8 @@ L.Control.Coordinates = L.Control.extend({
 		latitudeText: 'lat.',
 		longitudeText: 'lon.',
 		promptText: 'Press Ctrl+C to copy coordinates',
-		precision: 4
+		precision: 4,
+		visibleAfterClick: true
 	},
 
 	initialize: function(options)
@@ -29,10 +34,13 @@ L.Control.Coordinates = L.Control.extend({
 		var className = 'leaflet-control-coordinates',
 			that = this,
 			container = this._container = L.DomUtil.create('div', className);
-		this.visible = false;
-
+		
+		if (this.options.visibleAfterClick) {
+			this.visible = false;
 			L.DomUtil.addClass(container, 'hidden');
-
+		} else {
+			this.visible = true;
+		}
 
 		L.DomEvent.disableClickPropagation(container);
 
