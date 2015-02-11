@@ -76,13 +76,29 @@ L.Control.Coordinates = L.Control.extend({
 	 */
 	setCoordinates: function(obj)
 	{
+		if (obj.latlng) {
+			this.setLatLng(obj.latlng);
+			this.updateText();
+		}
+	},
+	/**
+	 * stores latlng internaly with the configured precision
+	 * @param latLng object
+	 */
+	setLatLng: function(latlng)
+	{
+		this.latlng = latlng;
+		this.updateText();
+	},
+	getLatLng: function()
+	{
+		return this.latlng;
+	},
+	updateText: function() {
 		if (!this.visible) {
 			L.DomUtil.removeClass(this._container, 'hidden');
 		}
-
-		if (obj.latlng) {
-			L.DomUtil.get(this._lat).innerHTML = '<strong>' + this.options.latitudeText + ':</strong> ' + obj.latlng.lat.toFixed(this.options.precision).toString();
-			L.DomUtil.get(this._lng).innerHTML = '<strong>' + this.options.longitudeText + ':</strong> ' + obj.latlng.lng.toFixed(this.options.precision).toString();
-		}
+		L.DomUtil.get(this._lat).innerHTML = '<strong>' + this.options.latitudeText + ':</strong> ' + this.latlng.lat.toFixed(this.options.precision).toString();
+		L.DomUtil.get(this._lng).innerHTML = '<strong>' + this.options.longitudeText + ':</strong> ' + this.latlng.lng.toFixed(this.options.precision).toString();
 	}
 });
