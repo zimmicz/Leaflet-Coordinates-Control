@@ -34,6 +34,12 @@ L.Control.Coordinates = L.Control.extend({
 		var className = 'leaflet-control-coordinates',
 			that = this,
 			container = this._container = L.DomUtil.create('div', className);
+
+		this.marker = L.marker(map.getCenter(),{draggable:true}).addTo(map);
+		L.DomEvent.addListener(this.marker, 'dragend', function() {
+			that.setLatLng(that.marker.getLatLng());
+		});
+
 		
 		if (this.options.visibleAfterClick) {
 			this.visible = false;
@@ -47,16 +53,7 @@ L.Control.Coordinates = L.Control.extend({
 		this._addText(container, map);
 
 		L.DomEvent.addListener(container, 'click', function() {
-			var lat = L.DomUtil.get(that._lat),
-				lng = L.DomUtil.get(that._lng),
-				latTextLen = this.options.latitudeText.length + 1,
-				lngTextLen = this.options.longitudeText.length + 1,
-				latTextIndex = lat.textContent.indexOf(this.options.latitudeText) + latTextLen,
-				lngTextIndex = lng.textContent.indexOf(this.options.longitudeText) + lngTextLen,
-				latCoordinate = lat.textContent.substr(latTextIndex),
-				lngCoordinate = lng.textContent.substr(lngTextIndex);
-
-			window.prompt(this.options.promptText, latCoordinate + ' ' + lngCoordinate);
+			window.prompt(this.options.promptText, this.latlng.lat + ' ' + this.latlng.lng);
     	}, this);
 
 		return container;
@@ -87,7 +84,9 @@ L.Control.Coordinates = L.Control.extend({
 	 */
 	setLatLng: function(latlng)
 	{
-		this.latlng = latlng;
+		var lat = latlng.lat.toFixed(this.options.precision);
+		var lng = latlng.lng.toFixed(this.options.precision);
+		this.latlng = L.latLng(lat,lng);
 		this.updateText();
 	},
 	getLatLng: function()
@@ -98,7 +97,7 @@ L.Control.Coordinates = L.Control.extend({
 		if (!this.visible) {
 			L.DomUtil.removeClass(this._container, 'hidden');
 		}
-		L.DomUtil.get(this._lat).innerHTML = '<strong>' + this.options.latitudeText + ':</strong> ' + this.latlng.lat.toFixed(this.options.precision).toString();
-		L.DomUtil.get(this._lng).innerHTML = '<strong>' + this.options.longitudeText + ':</strong> ' + this.latlng.lng.toFixed(this.options.precision).toString();
+		L.DomUtil.get(this._lat).innerHTML = '<strong>' + this.options.latitudeText + ':</strong> ' + this.latlng.lat.toString();
+		L.DomUtil.get(this._lng).innerHTML = '<strong>' + this.options.longitudeText + ':</strong> ' + this.latlng.lng.toString();
 	}
 });

@@ -25,19 +25,12 @@
 	<script src="../Control.Coordinates.js"></script>
 	<script>
 
-	  var attr_osm = 'Map data &copy; <a href="http://openstreetmap.org/">OpenStreetMap</a> contributors',
-      attr_overpass = 'POI via <a href="http://www.overpass-api.de/">Overpass API</a>';
-    var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {opacity: 0.7, attribution: [attr_osm, attr_overpass].join(', ')});
+	  var attr_osm = 'Map data &copy; <a href="http://openstreetmap.org/">OpenStreetMap</a> contributors';
+    var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {opacity: 0.7, attribution: [attr_osm].join(', ')});
 
 		var map = new L.Map('map').addLayer(osm).setView(new L.LatLng(52.265, 10.524), 14);
-		var marker = L.marker(map.getCenter(),{draggable:true}).addTo(map);
 
-		var c = new L.Control.Coordinates();
-		c.addTo(map);
-
-		marker.on('dragend', function(e) {
-			c.setLatLng(marker.getLatLng());
-		});
+		var c = new L.Control.Coordinates().addTo(map);
 
 	</script>
 </body>
