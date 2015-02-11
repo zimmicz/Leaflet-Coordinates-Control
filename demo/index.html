@@ -30,7 +30,18 @@
 
 		var map = new L.Map('map').addLayer(osm).setView(new L.LatLng(52.265, 10.524), 14);
 
-		var c = new L.Control.Coordinates().addTo(map);
+		var c = new L.Control.Coordinates({
+			position: 'bottomright',
+			latitudeText: 'lat.',
+			longitudeText: 'lon.',
+			promptText: 'Press Ctrl+C to copy coordinates',
+			precision: 4,
+			startVisible: false
+		});
+		c.addTo(map);
+		map.on('click', function(e) {
+			    c.toggleView(e.latlng);
+		});
 
 	</script>
 </body>
